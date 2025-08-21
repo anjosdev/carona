@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Custo de Viagem</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="highway">
+        <div class="road">
+            <div class="lines">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="theme-switcher" id="theme-toggle">
+        <i class="fas fa-sun"></i>
+    </div>
+
+    <div class="container">
+        <h1>Calculadora de Custo de Viagem</h1>
+
+        <div class="input-group">
+            <label for="fuel-price">Preço do Combustível (R$)</label>
+            <input type="number" id="fuel-price" placeholder="Digite o preço por litro">
+        </div>
+
+        <div class="input-group">
+            <label for="fuel-consumption">Consumo do Veículo (km/L)</label>
+            <input type="number" id="fuel-consumption" placeholder="Digite o consumo do seu carro">
+        </div>
+
+        <div class="input-group">
+            <label for="distance">Distância (km)</label>
+            <select id="distance-preset">
+                <option value="">-- Opções --</option>
+                <option value="212">BG > Coringa (ida e volta)</option>
+            </select>
+            <input type="number" id="distance" placeholder="Digite a distância (ida)">
+        </div>
+
+        <div class="input-group">
+            <label for="tolls">Pedágios (R$)</label>
+            <select id="tolls-preset">
+                <option value="">-- Opções --</option>
+                <option value="54.6">Bandeirantes (ida e volta)</option>
+            </select>
+            <input type="number" id="tolls" placeholder="Custo de pedágios (ida)">
+        </div>
+
+        <div class="input-group">
+            <label for="extra-costs">Custos Extras (R$)</label>
+            <input type="number" id="extra-costs" placeholder="Digite quaisquer custos adicionais">
+        </div>
+
+        <div class="input-group">
+            <label for="discounts">Descontos (R$)</label>
+            <input type="number" id="discounts" placeholder="Digite quaisquer descontos que você tenha">
+        </div>
+
+        <div class="input-group checkbox">
+            <input type="checkbox" id="round-trip">
+            <label for="round-trip">É uma viagem de ida e volta? (Dobrar a distância e o pedágio)</label>
+        </div>
+
+        <button id="calculate-btn">Calcular</button>
+
+        <div id="total-expense">
+            <p>O custo da sua viagem será exibido aqui.</p>
+        </div>
+
+        <div id="split-cost" class="hidden">
+            <h3>Dividir a Conta</h3>
+            <div class="input-group">
+                <label for="people-count">Número de Pessoas</label>
+                <input type="number" id="people-count" placeholder="Ex: 2" min="2">
+            </div>
+            <button id="split-btn">Dividir</button>
+            <div id="split-result"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

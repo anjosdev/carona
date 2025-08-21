@@ -1,0 +1,863 @@
+Project Path: carona
+
+Source Tree:
+
+```txt
+carona
+├── codebase.txt
+├── index.html
+├── script.js
+└── style.css
+
+```
+
+`carona/codebase.txt`:
+
+```txt
+Project Path: carona
+
+Source Tree:
+
+```txt
+carona
+├── codebase.txt
+├── index.html
+├── script.js
+└── style.css
+
+```
+
+`carona/index.html`:
+
+```html
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Cost Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="highway">
+        <div class="road">
+            <div class="lines">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="theme-switcher" id="theme-toggle">
+        <i class="fas fa-sun"></i>
+    </div>
+
+    <div class="container">
+        <h1>Travel Cost Calculator</h1>
+
+        <div class="input-group">
+            <label for="fuel-price">Fuel Price ($)</label>
+            <input type="number" id="fuel-price" placeholder="Enter fuel price per liter">
+        </div>
+
+        <div class="input-group">
+            <label for="fuel-consumption">Car Fuel Consumption (km/L)</label>
+            <input type="number" id="fuel-consumption" placeholder="Enter your car's fuel consumption">
+        </div>
+
+        <div class="input-group">
+            <label for="distance">Distance (km)</label>
+            <input type="number" id="distance" placeholder="Enter the total distance of your trip">
+        </div>
+
+        <div class="input-group checkbox">
+            <input type="checkbox" id="round-trip">
+            <label for="round-trip">Is this a round trip?</label>
+        </div>
+
+        <div class="input-group">
+            <label for="tolls">Tolls ($)</label>
+            <input type="number" id="tolls" placeholder="Enter total toll costs for one way">
+        </div>
+
+        <div class="input-group">
+            <label for="extra-costs">Extra Costs ($)</label>
+            <input type="number" id="extra-costs" placeholder="Enter any additional costs">
+        </div>
+
+        <div class="input-group">
+            <label for="discounts">Discounts ($)</label>
+            <input type="number" id="discounts" placeholder="Enter any discounts you have">
+        </div>
+
+        <button id="calculate-btn">Calculate</button>
+
+        <div id="total-expense">
+            <p>Your trip cost will be displayed here.</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+```
+
+`carona/script.js`:
+
+```js
+const calculateBtn = document.getElementById('calculate-btn');
+const totalExpenseDiv = document.getElementById('total-expense');
+const themeToggle = document.getElementById('theme-toggle');
+const themeIcon = themeToggle.querySelector('i');
+const htmlElement = document.documentElement;
+
+calculateBtn.addEventListener('click', () => {
+    const fuelPrice = parseFloat(document.getElementById('fuel-price').value);
+    const fuelConsumption = parseFloat(document.getElementById('fuel-consumption').value);
+    let distance = parseFloat(document.getElementById('distance').value);
+    let tolls = parseFloat(document.getElementById('tolls').value) || 0;
+    const extraCosts = parseFloat(document.getElementById('extra-costs').value) || 0;
+    const discounts = parseFloat(document.getElementById('discounts').value) || 0;
+    const isRoundTrip = document.getElementById('round-trip').checked;
+
+    if (isNaN(fuelPrice) || isNaN(fuelConsumption) || isNaN(distance)) {
+        alert('Please fill in all required fields.');
+        return;
+    }
+
+    if (fuelConsumption <= 0) {
+        alert('Car Fuel Consumption must be a positive number.');
+        return;
+    }
+
+    if (isRoundTrip) {
+        distance *= 2;
+        tolls *= 2;
+    }
+
+    const fuelCost = (distance / fuelConsumption) * fuelPrice;
+    const totalCost = fuelCost + tolls + extraCosts - discounts;
+
+    totalExpenseDiv.innerHTML = `
+        <h3>Calculation Breakdown</h3>
+        <p><span>Fuel Cost:</span> <span>$${fuelCost.toFixed(2)}</span></p>
+        <p><span>Tolls:</span> <span>$${tolls.toFixed(2)}</span></p>
+        <p><span>Extra Costs:</span> <span>$${extraCosts.toFixed(2)}</span></p>
+        <p><span>Discounts:</span> <span>-$${discounts.toFixed(2)}</span></p>
+        <p class="final-total"><span>Total Expense:</span> <span>$${totalCost.toFixed(2)}</span></p>
+    `;
+});
+
+themeToggle.addEventListener('click', () => {
+    const currentTheme = htmlElement.getAttribute('data-theme');
+    if (currentTheme === 'light') {
+        htmlElement.setAttribute('data-theme', 'dark');
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+    } else {
+        htmlElement.setAttribute('data-theme', 'light');
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+    }
+});
+
+```
+
+`carona/style.css`:
+
+```css
+:root {
+    --light-bg: #87CEEB; /* Sky Blue */
+    --light-road: #6b6b6b;
+    --light-lines: #ffffff;
+    --light-text: #000000;
+    --light-container-bg: rgba(255, 255, 255, 0.9);
+    --light-input-bg: #ffffff;
+    --light-button-bg: #4CAF50;
+    --light-button-text: #ffffff;
+    --light-result-bg: #f0f0f0;
+    --dark-bg: #0c0c1c; /* Night Sky */
+    --dark-road: #333333;
+    --dark-lines: #a9a9a9;
+    --dark-text: #ffffff;
+    --dark-container-bg: rgba(0, 0, 0, 0.8);
+    --dark-input-bg: #444444;
+    --dark-button-bg: #FFA500; /* Orange */
+    --dark-button-text: #000000;
+    --dark-result-bg: #222222;
+}
+
+[data-theme="light"] {
+    --bg-color: var(--light-bg);
+    --road-color: var(--light-road);
+    --lines-color: var(--light-lines);
+    --text-color: var(--light-text);
+    --container-bg-color: var(--light-container-bg);
+    --input-bg-color: var(--light-input-bg);
+    --button-bg-color: var(--light-button-bg);
+    --button-text-color: var(--light-button-text);
+    --result-bg-color: var(--light-result-bg);
+}
+
+[data-theme="dark"] {
+    --bg-color: var(--dark-bg);
+    --road-color: var(--dark-road);
+    --lines-color: var(--dark-lines);
+    --text-color: var(--dark-text);
+    --container-bg-color: var(--dark-container-bg);
+    --input-bg-color: var(--dark-input-bg);
+    --button-bg-color: var(--dark-button-bg);
+    --button-text-color: var(--dark-button-text);
+    --result-bg-color: var(--dark-result-bg);
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.5s, color 0.5s;
+    overflow-x: hidden;
+    position: relative;
+}
+
+.highway {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.road {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60%;
+    background-color: var(--road-color);
+    perspective: 100px;
+}
+
+.lines {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.line {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 5px;
+    height: 30px;
+    background-color: var(--lines-color);
+    animation: moveLines 2s linear infinite;
+}
+
+.line:nth-child(2) { animation-delay: 0.5s; }
+.line:nth-child(3) { animation-delay: 1s; }
+.line:nth-child(4) { animation-delay: 1.5s; }
+
+@keyframes moveLines {
+    from { bottom: -30px; }
+    to { bottom: 100%; }
+}
+
+.container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: var(--container-bg-color);
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    backdrop-filter: blur(10px);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group.checkbox {
+    display: flex;
+    align-items: center;
+}
+
+.input-group.checkbox input {
+    width: auto;
+    margin-right: 10px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: var(--input-bg-color);
+    color: var(--text-color);
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+#total-expense {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: var(--result-bg-color);
+    border-radius: 5px;
+    text-align: left;
+    font-size: 16px;
+}
+
+#total-expense h3 {
+    text-align: center;
+    margin-top: 0;
+    font-size: 20px;
+}
+
+#total-expense p {
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+#total-expense .final-total {
+    font-weight: bold;
+    font-size: 20px;
+    margin-top: 15px;
+    border-top: 2px solid var(--text-color);
+    padding-top: 10px;
+}
+
+.theme-switcher {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.theme-switcher i {
+    font-size: 24px;
+}
+
+@media (max-width: 600px) {
+    .container {
+        margin: 20px;
+        padding: 20px;
+    }
+}
+
+```
+
+```
+
+`carona/index.html`:
+
+```html
+<!DOCTYPE html>
+<html lang="pt-br" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Custo de Viagem</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="highway">
+        <div class="road">
+            <div class="lines">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="theme-switcher" id="theme-toggle">
+        <i class="fas fa-sun"></i>
+    </div>
+
+    <div class="container">
+        <h1>Calculadora de Custo de Viagem</h1>
+
+        <div class="input-group">
+            <label for="fuel-price">Preço do Combustível (R$)</label>
+            <input type="number" id="fuel-price" placeholder="Digite o preço por litro">
+        </div>
+
+        <div class="input-group">
+            <label for="fuel-consumption">Consumo do Veículo (km/L)</label>
+            <input type="number" id="fuel-consumption" placeholder="Digite o consumo do seu carro">
+        </div>
+
+        <div class="input-group">
+            <label for="distance">Distância (km)</label>
+            <select id="distance-preset">
+                <option value="">-- Predefinição --</option>
+                <option value="212">Coringa (ida e volta)</option>
+            </select>
+            <input type="number" id="distance" placeholder="Digite a distância (ida)">
+        </div>
+
+        <div class="input-group checkbox">
+            <input type="checkbox" id="round-trip">
+            <label for="round-trip">É uma viagem de ida e volta?</label>
+        </div>
+
+        <div class="input-group">
+            <label for="tolls">Pedágios (R$)</label>
+            <select id="tolls-preset">
+                <option value="">-- Predefinição --</option>
+                <option value="54.6">Bandeirantes (ida e volta)</option>
+            </select>
+            <input type="number" id="tolls" placeholder="Custo de pedágios (ida)">
+        </div>
+
+        <div class="input-group">
+            <label for="extra-costs">Custos Extras (R$)</label>
+            <input type="number" id="extra-costs" placeholder="Digite quaisquer custos adicionais">
+        </div>
+
+        <div class="input-group">
+            <label for="discounts">Descontos (R$)</label>
+            <input type="number" id="discounts" placeholder="Digite quaisquer descontos que você tenha">
+        </div>
+
+        <button id="calculate-btn">Calcular</button>
+
+        <div id="total-expense">
+            <p>O custo da sua viagem será exibido aqui.</p>
+        </div>
+
+        <div id="split-cost" class="hidden">
+            <h3>Dividir a Conta</h3>
+            <div class="input-group">
+                <label for="people-count">Número de Pessoas</label>
+                <input type="number" id="people-count" placeholder="Ex: 2" min="2">
+            </div>
+            <button id="split-btn">Dividir</button>
+            <div id="split-result"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+```
+
+`carona/script.js`:
+
+```js
+const calculateBtn = document.getElementById('calculate-btn');
+const totalExpenseDiv = document.getElementById('total-expense');
+const themeToggle = document.getElementById('theme-toggle');
+const themeIcon = themeToggle.querySelector('i');
+const htmlElement = document.documentElement;
+
+// New elements for presets and splitting
+const distancePreset = document.getElementById('distance-preset');
+const tollsPreset = document.getElementById('tolls-preset');
+const distanceInput = document.getElementById('distance');
+const tollsInput = document.getElementById('tolls');
+const roundTripCheckbox = document.getElementById('round-trip');
+
+const splitCostDiv = document.getElementById('split-cost');
+const splitBtn = document.getElementById('split-btn');
+const splitResultDiv = document.getElementById('split-result');
+const peopleCountInput = document.getElementById('people-count');
+
+let currentTotalCost = 0;
+
+distancePreset.addEventListener('change', (e) => {
+    if (e.target.value) {
+        distanceInput.value = e.target.value;
+        // This preset is already a round trip, so disable the checkbox to prevent doubling the distance.
+        roundTripCheckbox.checked = false;
+        roundTripCheckbox.disabled = true;
+        if (tollsPreset.value) tollsPreset.value = ""; // Clear other preset
+    } else {
+        roundTripCheckbox.disabled = false;
+    }
+});
+
+tollsPreset.addEventListener('change', (e) => {
+    if (e.target.value) {
+        tollsInput.value = e.target.value;
+        // This preset implies a round trip, so check and disable the box to ensure distance is doubled.
+        roundTripCheckbox.checked = true;
+        roundTripCheckbox.disabled = true;
+        if (distancePreset.value) distancePreset.value = ""; // Clear other preset
+    } else {
+        roundTripCheckbox.disabled = false;
+    }
+});
+
+distanceInput.addEventListener('input', () => {
+    if (distancePreset.value) {
+        distancePreset.value = "";
+        roundTripCheckbox.disabled = false;
+    }
+});
+
+tollsInput.addEventListener('input', () => {
+    if (tollsPreset.value) {
+        tollsPreset.value = "";
+        roundTripCheckbox.disabled = false;
+    }
+});
+
+
+calculateBtn.addEventListener('click', () => {
+    const fuelPrice = parseFloat(document.getElementById('fuel-price').value);
+    const fuelConsumption = parseFloat(document.getElementById('fuel-consumption').value);
+    let distance = parseFloat(distanceInput.value);
+    let tolls = parseFloat(tollsInput.value) || 0;
+    const extraCosts = parseFloat(document.getElementById('extra-costs').value) || 0;
+    const discounts = parseFloat(document.getElementById('discounts').value) || 0;
+    
+    const isRoundTrip = roundTripCheckbox.checked;
+    const isTollsPresetSelected = tollsPreset.value !== "";
+
+    if (isNaN(fuelPrice) || isNaN(fuelConsumption) || isNaN(distance)) {
+        alert('Por favor, preencha todos os campos obrigatórios.');
+        return;
+    }
+
+    if (fuelConsumption <= 0) {
+        alert('O consumo do veículo deve ser um número positivo.');
+        return;
+    }
+
+    if (isRoundTrip) {
+        distance *= 2;
+        if (!isTollsPresetSelected) { // Don't double tolls if the round-trip toll preset is active
+            tolls *= 2;
+        }
+    }
+
+    const fuelCost = (distance / fuelConsumption) * fuelPrice;
+    const totalCost = fuelCost + tolls + extraCosts - discounts;
+    currentTotalCost = totalCost; // Store for splitting
+
+    totalExpenseDiv.innerHTML = `
+        <h3>Detalhamento do Custo</h3>
+        <p><span>Custo do Combustível:</span> <span>R$${fuelCost.toFixed(2)}</span></p>
+        <p><span>Pedágios:</span> <span>R$${tolls.toFixed(2)}</span></p>
+        <p><span>Custos Extras:</span> <span>R$${extraCosts.toFixed(2)}</span></p>
+        <p><span>Descontos:</span> <span>-R$${discounts.toFixed(2)}</span></p>
+        <p class="final-total"><span>Custo Total:</span> <span>R$${totalCost.toFixed(2)}</span></p>
+    `;
+
+    splitCostDiv.classList.remove('hidden');
+    splitResultDiv.innerHTML = ""; // Clear previous split result
+    peopleCountInput.value = ""; // Clear previous people count
+});
+
+splitBtn.addEventListener('click', () => {
+    const peopleCount = parseInt(peopleCountInput.value);
+
+    if (isNaN(peopleCount) || peopleCount <= 1) {
+        alert('Por favor, insira um número de pessoas válido (maior que 1).');
+        return;
+    }
+
+    const costPerPerson = currentTotalCost / peopleCount;
+    splitResultDiv.innerHTML = `<p>Custo por pessoa: <strong>R$${costPerPerson.toFixed(2)}</strong></p>`;
+});
+
+
+themeToggle.addEventListener('click', () => {
+    const currentTheme = htmlElement.getAttribute('data-theme');
+    if (currentTheme === 'light') {
+        htmlElement.setAttribute('data-theme', 'dark');
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+    } else {
+        htmlElement.setAttribute('data-theme', 'light');
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+    }
+});
+
+```
+
+`carona/style.css`:
+
+```css
+:root {
+    --light-bg: #87CEEB; /* Sky Blue */
+    --light-road: #6b6b6b;
+    --light-lines: #ffffff;
+    --light-text: #000000;
+    --light-container-bg: rgba(255, 255, 255, 0.9);
+    --light-input-bg: #ffffff;
+    --light-button-bg: #4CAF50;
+    --light-button-text: #ffffff;
+    --light-result-bg: #f0f0f0;
+    --dark-bg: #0c0c1c; /* Night Sky */
+    --dark-road: #333333;
+    --dark-lines: #a9a9a9;
+    --dark-text: #ffffff;
+    --dark-container-bg: rgba(0, 0, 0, 0.8);
+    --dark-input-bg: #444444;
+    --dark-button-bg: #FFA500; /* Orange */
+    --dark-button-text: #000000;
+    --dark-result-bg: #222222;
+}
+
+[data-theme="light"] {
+    --bg-color: var(--light-bg);
+    --road-color: var(--light-road);
+    --lines-color: var(--light-lines);
+    --text-color: var(--light-text);
+    --container-bg-color: var(--light-container-bg);
+    --input-bg-color: var(--light-input-bg);
+    --button-bg-color: var(--light-button-bg);
+    --button-text-color: var(--light-button-text);
+    --result-bg-color: var(--light-result-bg);
+}
+
+[data-theme="dark"] {
+    --bg-color: var(--dark-bg);
+    --road-color: var(--dark-road);
+    --lines-color: var(--dark-lines);
+    --text-color: var(--dark-text);
+    --container-bg-color: var(--dark-container-bg);
+    --input-bg-color: var(--dark-input-bg);
+    --button-bg-color: var(--dark-button-bg);
+    --button-text-color: var(--dark-button-text);
+    --result-bg-color: var(--dark-result-bg);
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.5s, color 0.5s;
+    overflow-x: hidden;
+    position: relative;
+}
+
+.highway {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.road {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60%;
+    background-color: var(--road-color);
+    perspective: 100px;
+}
+
+.lines {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.line {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 5px;
+    height: 30px;
+    background-color: var(--lines-color);
+    animation: moveLines 2s linear infinite;
+}
+
+.line:nth-child(2) { animation-delay: 0.5s; }
+.line:nth-child(3) { animation-delay: 1s; }
+.line:nth-child(4) { animation-delay: 1.5s; }
+
+@keyframes moveLines {
+    from { bottom: -30px; }
+    to { bottom: 100%; }
+}
+
+.container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: var(--container-bg-color);
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    backdrop-filter: blur(10px);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group.checkbox {
+    display: flex;
+    align-items: center;
+}
+
+.input-group.checkbox input {
+    width: auto;
+    margin-right: 10px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: var(--input-bg-color);
+    color: var(--text-color);
+    box-sizing: border-box;
+}
+
+select {
+    margin-bottom: 10px;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+#total-expense {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: var(--result-bg-color);
+    border-radius: 5px;
+    text-align: left;
+    font-size: 16px;
+}
+
+#total-expense h3 {
+    text-align: center;
+    margin-top: 0;
+    font-size: 20px;
+}
+
+#total-expense p {
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+#total-expense .final-total {
+    font-weight: bold;
+    font-size: 20px;
+    margin-top: 15px;
+    border-top: 2px solid var(--text-color);
+    padding-top: 10px;
+}
+
+.theme-switcher {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.theme-switcher i {
+    font-size: 24px;
+}
+
+#split-cost {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: var(--result-bg-color);
+    border-radius: 5px;
+}
+
+#split-cost.hidden {
+    display: none;
+}
+
+#split-cost h3 {
+    text-align: center;
+    margin-top: 0;
+}
+
+#split-cost button {
+    margin-top: 10px;
+}
+
+#split-result {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+#split-result strong {
+    color: var(--button-bg-color);
+}
+
+
+@media (max-width: 600px) {
+    .container {
+        margin: 20px;
+        padding: 20px;
+    }
+}
+
+```
