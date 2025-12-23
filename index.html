@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br" data-theme="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
 
     <div class="highway">
@@ -41,7 +43,7 @@
             <label for="distance">Distância (km)</label>
             <select id="distance-preset">
                 <option value="">-- Opções --</option>
-                <option value="212">BG > Coringa (ida e volta)</option>
+                <option value="111">BG > São Paulo</option>
             </select>
             <input type="number" id="distance" placeholder="Digite a distância (ida)">
         </div>
@@ -50,9 +52,31 @@
             <label for="tolls">Pedágios (R$)</label>
             <select id="tolls-preset">
                 <option value="">-- Opções --</option>
-                <option value="54.6">Bandeirantes (ida e volta)</option>
+                <option value="27.30">Bandeirantes Campinas > SP</option>
             </select>
             <input type="number" id="tolls" placeholder="Custo de pedágios (ida)">
+        </div>
+
+        <div class="input-group checkbox">
+            <input type="checkbox" id="add-return-trip">
+            <label for="add-return-trip">Adicionar volta</label>
+        </div>
+
+        <div id="return-trip-fields" class="hidden">
+            <div class="input-group checkbox small-checkbox">
+                <input type="checkbox" id="replicate-outbound">
+                <label for="replicate-outbound">Replicar valores da ida</label>
+            </div>
+
+            <div class="input-group">
+                <label for="distance-return">Distância (km) - Volta</label>
+                <input type="number" id="distance-return" placeholder="Digite a distância (volta)">
+            </div>
+
+            <div class="input-group">
+                <label for="tolls-return">Pedágios (R$) - Volta</label>
+                <input type="number" id="tolls-return" placeholder="Custo de pedágios (volta)">
+            </div>
         </div>
 
         <div class="input-group">
@@ -65,10 +89,7 @@
             <input type="number" id="discounts" placeholder="Digite quaisquer descontos que você tenha">
         </div>
 
-        <div class="input-group checkbox">
-            <input type="checkbox" id="round-trip">
-            <label for="round-trip">É uma viagem de ida e volta? (Dobrar a distância e o pedágio)</label>
-        </div>
+
 
         <button id="calculate-btn">Calcular</button>
 
@@ -89,4 +110,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>

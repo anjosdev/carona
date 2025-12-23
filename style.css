@@ -209,7 +209,7 @@ button:hover {
     border-radius: 5px;
 }
 
-#split-cost.hidden {
+.hidden {
     display: none;
 }
 
